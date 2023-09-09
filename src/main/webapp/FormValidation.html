@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<title>Form Validation</title>
+<script>
+function submitForm(event) {
+		// Get the form data
+		event.preventDefault();
+		  var formData = new FormData(document.getElementById("form"));
+
+		  // Create an XMLHttpRequest object
+		  var xhr = new XMLHttpRequest();
+
+		// Build the query string
+		  var queryString = new URLSearchParams(formData).toString();
+
+		  // Set the request method to GET and append the query string to the URL
+		  xhr.open("GET", "FormServlet?" + queryString, true);
+
+		  // Send the request without the form data
+		  xhr.send();
+
+
+		  // Set the callback function
+		  xhr.onload = function() {
+		    if (xhr.status === 200) {
+		      // Get the JSON response
+		      var json = JSON.parse(xhr.responseText);
+
+		      // Extract the fields from the JSON object
+		      var name = json.name;
+		      var email = json.email;
+		      var gender = json.gender;
+		      var age = json.age;
+		      var message = json.message;
+		      var dob = json.dob;
+		      var country = json.country;
+
+		      // Create a table
+		      var table = document.createElement("table");
+
+		      // Add a header row
+		      var row = table.insertRow(0);
+		      var cell = row.insertCell(0);
+		      cell.innerHTML = "Name";
+		      var cell = row.insertCell(1);
+		      cell.innerHTML = "Email";
+		      var cell = row.insertCell(2);
+		      cell.innerHTML = "Gender";
+		      var cell = row.insertCell(3);
+		      cell.innerHTML = "Age";
+		      var cell = row.insertCell(4);
+		      cell.innerHTML = "Message";
+		      var cell = row.insertCell(5);
+		      cell.innerHTML = "Date of Birth";
+		      var cell = row.insertCell(6);
+		      cell.innerHTML = "Country";
+
+		      // Add the data rows
+		      var row = table.insertRow(1);
+		      var cell = row.insertCell(0);
+		      cell.innerHTML = name;
+		      var cell = row.insertCell(1);
+		      cell.innerHTML = email;
+		      var cell = row.insertCell(2);
+		      cell.innerHTML = gender;
+		      var cell = row.insertCell(3);
+		      cell.innerHTML = age;
+		      var cell = row.insertCell(4);
+		      cell.innerHTML = message;
+		      var cell = row.insertCell(5);
+		      cell.innerHTML = dob;
+		      var cell = row.insertCell(6);
+		      cell.innerHTML = country;
+
+		      // Append the table to the form
+		      var div = document.getElementById("form-results");
+		      div.appendChild(table);
+		    } else {
+		      // An error occurred
+		      alert("An error occurred: " + xhr.status);
+		    }
+		  };
+		}
+</script>
+<body>
+<form id="form" onsubmit="submitForm(event)">
+    <fieldset>
+        <legend>Registration Form</legend>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required pattern=".{3,}" placeholder="Your Name">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required placeholder="yourname@example.com">
+        <br>
+        <label for="gender">Gender:</label>
+        <input type="radio" id="male" name="gender" value="male" required checked> Male
+        <input type="radio" id="female" name="gender" value="female"> Female
+        <br>
+        <label for="age">Age:</label>
+        <input type="range" id="age" name="age" min="0" max="120" required>
+        <br>
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required placeholder="Your message here..."></textarea>
+        <br>
+        <label for="dob">Date of Birth:</label>
+        <input type="month" id="dob" name="dob" required>
+        <br>
+        <label for="country">Country:</label>
+        <select id="country" name="country" required>
+            <option value="">Select a country</option>
+            <option value="usa">United States</option>
+            <option value="canada">Canada</option>
+            <!-- Add more options as needed -->
+        </select>
+        <br>
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </fieldset>
+</form>
+<div id="form-results"></div>
+</body>
+</html>
